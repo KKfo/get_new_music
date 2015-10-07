@@ -32,8 +32,16 @@ def initDb(dbconn):
 def saveData(dbconn,pages,c):
     for page in pages:
         for e in page:
-            c.execute("INSERT INTO  pitchfork_best_new_tracks(Artist, Song ,Date , Label, Reviewer ,Review , Media) \
-            VALUES (?,?,?,?,?,?,?);", (e['artist'] or 'none', e['song'] or 'none', e['date'] or 'none', e['label'] or 'none', e['reviewer'] or 'none', e['review'] or 'none', e['media'] or 'none'))
+            c.execute("INSERT INTO  pitchfork_best_new_tracks(\
+            Artist, Song ,Date , Label, Reviewer ,Review , Media) \
+            VALUES (?,?,?,?,?,?,?);",
+                      (e['artist'] or 'none', 
+                       e['song'] or 'none',
+                       e['date'] or 'none',
+                       e['label'] or 'none',
+                       e['reviewer'] or 'none',
+                       e['review'] or 'none', 
+                       e['media'] or 'none'))
     print('saving data...')
     dbconn.commit()
 
