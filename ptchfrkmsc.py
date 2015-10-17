@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/bin/env pypy3
 
 import sqlite3
 import os.path
@@ -11,11 +11,13 @@ from bs4 import BeautifulSoup
 from requests import Session
 import requests
 from time import sleep
+import sys
 
+PARSER = hasattr(sys, "pypy_translation_info") and 'html.parser' or 'lxml'
 NWORKERS = 5
 WEBSITE='http://pitchfork.com/reviews/best/tracks/'
 FROM = 1
-TO = 190
+TO = 2
 def initDb(dbconn):
     c = dbconn.cursor()
     c.execute('CREATE TABLE IF NOT EXISTS \
@@ -48,7 +50,7 @@ def saveData(dbconn,pages,c):
 def doExtract(html):
     if not html:
         return []
-    s = BeautifulSoup(html,'lxml')
+    s = BeautifulSoup(html, PARSER)
     ds = s.find_all('div', class_='info')[0:5]
     info = [{
         'artist' : d.h1 and d.h1.find_all('span',class_='artist') and d.h1.find_all('span',class_='artist')[0].string.strip(),
